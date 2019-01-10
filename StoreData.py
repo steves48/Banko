@@ -1,6 +1,6 @@
 #StoreData
 
-import pickle, EnterTxs
+import pickle, EnterTxs, datetime
 
 #Pickle the final list of transactions and unique ID:
 def StoreAllTxs(TxLst,LastUniqueId):
@@ -27,4 +27,11 @@ def RetrieveTransLst():
 def StoreClearedBalance(ClearedBalanceLst):
     objFile = open("ClearedBalanceRecord.dat","wb")
     pickle.dump((ClearedBalanceLst),objFile)
+    objFile.close()
+
+#store the backup file
+def StoreBackupFile(TxLst):
+    TodaysDate = datetime.date.today()
+    objFile = open("BackupTxs.dat", "ab")
+    pickle.dump((TodaysDate, TxLst), objFile)
     objFile.close()

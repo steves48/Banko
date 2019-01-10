@@ -54,10 +54,7 @@ import datetime, pickle, EnterTxs
 # pickle.dump(cB,objFile)
 # objFile.close()
 
-# tstLst = [(0.0,datetime.date.today())]
-# objFile = open("ClearedBalanceRecord.dat", "wb")
-# pickle.dump(tstLst,objFile)
-# objFile.close()
+
 
 # objFile = open("ClearedBalanceRecord.dat", "rb")
 # out = pickle.load(objFile)
@@ -65,22 +62,50 @@ import datetime, pickle, EnterTxs
 # objFile.close()
 # print(out[0])
 
-newLst = [[5,datetime.date.today(),"web","first descrip","first cat","first memo",45.56,False,0.0]]
-objFile = open("Transactions1.dat","wb")
-pickle.dump(newLst,objFile)
+# newLst = [[5,datetime.date.today(),"web","first descrip","first cat","first memo",45.56,False,0.0]]
+# objFile = open("Transactions1.dat","wb")
+# pickle.dump(newLst,objFile)
+# objFile.close()
+#
+#
+# objFile = open("Transactions1.dat", "rb")
+# LstTrans = pickle.load(objFile) #LstTrans is the list of all recorded transactions
+# objFile.close()
+# print(LstTrans)
+# # ans = EnterTxs.CalculateClearedBalance(LstTrans)
+# # print(ans)
+#
+# def SortByDate(TransactionList):
+#     return sorted(TransactionList, key = lambda x: x[1])
+#
+# tLst = [[55,datetime.date.today()], [107,datetime.date(2018,5,12)]]
+# a = SortByDate(tLst)
+# print(a)
+
+
+# objFile = open("Test2.dat", "ab")
+# pickle.dump("456", objFile)
+# objFile.close()
+#THIS IS IT
+objFile = open("BackupTxs.dat","rb")
+b = []
+while True:
+    try:
+        c = pickle.load(objFile)
+        b.append(c)
+    except EOFError:
+        break
 objFile.close()
+print("No. of records = ", len(b))
+# for lst in b:
+#     for tx in lst:
+#         print(tx)
 
+for i in range(len(b)):
+    print("Record no. ", i)
+    for tx in b[i]:#b[i][0] will be date; b[i][1] will be the tx list.  Need to overwrite backup file with the
+        #new tx records that include the date in the tuple.
+        print(tx)
+    print("------------------")
 
-objFile = open("Transactions1.dat", "rb")
-LstTrans = pickle.load(objFile) #LstTrans is the list of all recorded transactions
-objFile.close()
-print(LstTrans)
-# ans = EnterTxs.CalculateClearedBalance(LstTrans)
-# print(ans)
-
-def SortByDate(TransactionList):
-    return sorted(TransactionList, key = lambda x: x[1])
-
-tLst = [[55,datetime.date.today()], [107,datetime.date(2018,5,12)]]
-a = SortByDate(tLst)
-print(a)
+#Need function to print selected tx record
