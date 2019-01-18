@@ -37,7 +37,7 @@ d = 8765.345678999
 #         print("Y")
 # if not "." in f:
 #     print("no")
-import datetime, pickle, EnterTxs
+import datetime, pickle, EnterTxs, Presentation, Backup_Functions
 # TheDate = datetime.date.today()
 # print(TheDate)
 # strDate = str(TheDate)
@@ -83,29 +83,82 @@ import datetime, pickle, EnterTxs
 # print(a)
 
 
+
 # objFile = open("Test2.dat", "ab")
 # pickle.dump("456", objFile)
 # objFile.close()
 #THIS IS IT
-objFile = open("BackupTxs.dat","rb")
-b = []
-while True:
-    try:
-        c = pickle.load(objFile)
-        b.append(c)
-    except EOFError:
-        break
-objFile.close()
-print("No. of records = ", len(b))
-# for lst in b:
-#     for tx in lst:
+# objFile = open("BackupTxs.dat","rb")
+# b = []
+# while True:
+#     try:
+#         c = pickle.load(objFile)
+#         b.append(c)
+#     except EOFError:
+#         break
+# objFile.close()
+# print("No. of records = ", len(b))
+# # for lst in b:
+# #     for tx in lst:
+# #         print(tx)
+#
+# for i in range(len(b)):
+#     print("Record no. ", i)
+#     for tx in b[i]:#b[i][0] will be date; b[i][1] will be the tx list.  Need to overwrite backup file with the
+#         #new tx records that include the date in the tuple.
 #         print(tx)
+#     print("------------------")
+#
+# #Need function to print selected tx record
+#
 
-for i in range(len(b)):
-    print("Record no. ", i)
-    for tx in b[i]:#b[i][0] will be date; b[i][1] will be the tx list.  Need to overwrite backup file with the
-        #new tx records that include the date in the tuple.
-        print(tx)
-    print("------------------")
+# def PrintBackupFile(bl): #used for printing multiple registers:  either the entire file of backups, or
+# #     #backups by date
+# #     print("This is the backup file.")
+# #     print("-------------------------------------------------------------------------------------------------")
+# #     print("No. of records = ", len(bl))
+# #     print("-------------------------------------------------------------------------------------------------")
+# #     #Each bl[i] is a transaction list.  bl[i][0] is the backup date and bl[i][1] is the transaction list  itself.
+# #     for i in range(len(bl)):
+# #         print("Record no. ", i , "Date: ", bl[i][0])
+# #         #for tx in bl[i][1]:#bl[i][0] will be date; bl[i][1] will be the tx list.
+# #         Presentation.PrintRegister(bl[i][1])
+# #         print("END of this register")
+# #         print("##################################################################################################")
+# #
+# # objFile = open("BackupTxs.dat", "rb")
+# # oneReg = pickle.load(objFile)
+# # objFile.close()
+# # print(oneReg)
+# #
+# # PrintBackupFile(oneReg)
 
-#Need function to print selected tx record
+# textFile = open("BackupFreq.txt", "w")
+# textFile.write("Daily")
+# textFile.close()
+# textFile = open("BackupFreq.txt", "r")
+# print(textFile.readline())
+# textFile.close()
+# objFile = open("LastBackupDate.dat", "wb")
+# pickle.dump(datetime.date.today(),objFile)
+# objFile.close()
+# objFile = open("LastBackupDate.dat", "rb")
+# todaysdate = pickle.load(objFile)
+# objFile.close()
+# print(todaysdate)
+
+# Backup_Functions.FrequencyBackupDecider()
+# a = Backup_Functions.ObtainBackupFrequency()
+# print(a)
+#
+# Backup_Functions.StoreDateOfBackup()
+# b = Backup_Functions.ObtainDateOfLastBU()
+# print(b)
+
+# objFile = open("Id_Backup.dat","wb")
+# pickle.dump(0,objFile)
+# objFile.close()
+objFile = open("Id_Backup.dat","rb")
+a = pickle.load(objFile)
+objFile.close()
+print(a)
