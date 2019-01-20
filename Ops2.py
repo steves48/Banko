@@ -8,9 +8,10 @@ Dev: SJSarewitz
 
 
 
-import pickle, datetime, EnterTxs, Presentation, Revisions, Searches, StoreData
+import pickle, datetime, EnterTxs, Presentation, Revisions, Searches, StoreData, Backup_Functions
 
 #data
+CurrentDate = datetime.date.today()
 startDate = None
 endDate = None
 lstByDate = []
@@ -67,7 +68,9 @@ while True:
     Search for an amount...............a
     Check off cleared entries..........b
     Display cleared balance history....h
+    Print balances.....................k
     Revise a transaction...............r
+    Backup file functions..............v
     Quit the program...................q or <enter>
     """)
 
@@ -79,14 +82,19 @@ while True:
         EachTransaction = EnterTxs.EnterDebit(intUniqueId)
         #append the transaction to the list of transactions
         LstTrans.append(EachTransaction)
-        StoreData.StoreAllTxs(LstTrans,intUniqueId)
-        LstTrans = StoreData.RetrieveTransLst()
+        try:
+            StoreData.StoreAllTxs(LstTrans,intUniqueId)
+            LstTrans = StoreData.RetrieveTransLst()
+        except TypeError:
+            print("Incorrect date format.")
     elif Triage.lower() == "d":
         # invoke function to enter the transaction
         intUniqueId += 1
         EachTransaction = EnterTxs.EnterDeposit(intUniqueId)
         # append the transaction to the list of transactions
         LstTrans.append(EachTransaction)
+        StoreData.StoreAllTxs(LstTrans, intUniqueId)
+        LstTrans = StoreData.RetrieveTransLst()
     # invoke function to print transactions for a date range:
     elif Triage.lower() == "p":
         print("Start date...")
@@ -129,13 +137,28 @@ while True:
             ClearedBalLst.append((ClearedBal,datetime.date.today()))
             StoreData.StoreClearedBalance(ClearedBalLst)
             StoreData.StoreAllTxs(LstTrans,intUniqueId)
+
     elif Triage.lower() == "h":
         #Display the cleared balance history
         Presentation.DisplayClearedHx(ClearedBalLst)
+
+    elif Triage.lower() == "k":
+        print("Ending balance:", Balance)
+        print("Today's balance:", Searches.GetTodaysBalance(LstTrans))
+        print("Cleared balance:", ClearedBal)
+
     elif Triage.lower() == "c":
         #Display the entire register
         Presentation.PrintRegister(LstTrans)
         print("--------------------------------------------------")
+
+    elif Triage.lower() == "v":
+        if Backup_Functions.BackupChoices() == "restored":  #if a restore was done, the current register(LstTrans) must be
+            #replaced by the restored register:
+            LstTrans = StoreData.RetrieveTransLst()
+
+
+
     elif Triage.lower() == "q":
         break
     else: print("Invalid entry.  Try again.")
@@ -155,6 +178,21 @@ Presentation.PrintRegister(LstTrans)
 #StoreAllTxs function isorts the tx's by date and calculates the balances prior to pickling the list of transactions.
 StoreData.StoreAllTxs(LstTrans,intUniqueId)
 StoreData.StoreClearedBalance(ClearedBalLst)
+#Under the backup functions, the user can decide whether to backup once a day, or every time the program quits.
+Decision = Backup_Functions.ObtainBackupFrequency()
+if Decision == "every":
+    if Backup_Functions.AskForBackup() == True:
+        Backup_Functions.StoreBackupFile(LstTrans)
+else:
+    if  CurrentDate != Backup_Functions.ObtainDateOfLastBU():
+        Backup_Functions.StoreBackupFile(LstTrans)
+        print("\nDaily register backup performed!")
+    else:
+        print("\nFile already backed up once today.")
+
+
+#Backup_Functions.StoreBackupFile(LstTrans)
+
 # objFile = open("Transactions1.dat", "wb")
 # pickle.dump(LstTrans, objFile)
 # objFile.close()
